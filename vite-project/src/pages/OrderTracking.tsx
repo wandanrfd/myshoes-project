@@ -4,7 +4,6 @@ import type { Order } from "../types";
 import { dummyDashboardOrdersData } from "../assets/assets";
 import Loading from "../components/Loading";
 import { ArrowLeftIcon, MapPinIcon, PhoneIcon } from "lucide-react";
-import OrderOTP from "../components/OrderTracking/OrderOTP.tsx";
 import LiveMap from "../components/OrderTracking/LiveMap.tsx";
 import OrderTimeLine from "../components/OrderTracking/OrderTimeLine.tsx";
 
@@ -15,7 +14,7 @@ const OrderTracking = () => {
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-  const [liveLocation, setLiveLocation] = useState<{
+  const [liveLocation] = useState<{
     lat: number;
     lng: number;
   } | null>(null);

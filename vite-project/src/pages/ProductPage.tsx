@@ -2,13 +2,11 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useState, useEffect } from "react";
 import type { Product } from "../types";
-import { dummyProducts } from "../assets/assets";
 import Loading from "../components/Loading";
 import {
   Home as HomeIcon,
   ArrowLeft as ArrowLeftIcon,
   Leaf as LeafIcon,
-  Star as StarIcon,
   Minus as MinusIcon,
   Plus as PlusIcon,
   ShoppingCart as ShoppingCartIcon,
@@ -16,13 +14,12 @@ import {
 import api from "../config/api";
 
 const ProductPage = () => {
-  const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "Rp ";
   const { id } = useParams();
   const navigate = useNavigate();
   const { items, addToCart, updateQuantity, removeFromCart } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
-  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [localQuantity, setLocalQuantity] = useState(1);
 
@@ -38,7 +35,9 @@ const ProductPage = () => {
         return api.get(`/product?category=${data.product.category}`);
       })
       .then(({ data }) => {
-        setRelatedProducts(data.products.filter((p: Product) => p.id !== id));
+        setRelatedProducts(
+          data.products.filter((p: Product) => (p._id || (p as any).id) !== id),
+        );
       })
       .catch(() => navigate("/product"))
       .finally(() => setLoading(false));
@@ -47,7 +46,11 @@ const ProductPage = () => {
   if (loading) return <Loading />;
   if (!product) return null;
 
-  const cartItem = items.find((item) => item.product.id === product.id);
+  const cartItem = items.find(
+    (item) =>
+      (item.product._id || (item.product as any).id) ===
+      (product._id || (product as any).id),
+  );
   const inCart = !!cartItem;
   const displayQuantity = inCart ? cartItem.quantity : localQuantity;
 

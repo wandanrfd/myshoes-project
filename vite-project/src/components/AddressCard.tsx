@@ -1,4 +1,3 @@
-import React from "react";
 import type { Address } from "../types";
 import { MapPinIcon, CheckIcon, PencilIcon, Trash2Icon } from "lucide-react";
 
@@ -8,11 +7,7 @@ interface AddressCardProps {
   setAddresses: (addresses: Address[]) => void;
 }
 
-const AddressCard = ({
-  addr,
-  onEditHandler,
-  setAddresses,
-}: AddressCardProps) => {
+const AddressCard = ({ addr, onEditHandler }: AddressCardProps) => {
   const handleDelete = async (id: string) => {
     console.log(id);
   };

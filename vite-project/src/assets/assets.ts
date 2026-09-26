@@ -1,12 +1,4 @@
-import {
-  TruckIcon,
-  LeafIcon,
-  ClockIcon,
-  ShieldCheckIcon,
-  MapPinIcon,
-  PhoneIcon,
-  MailIcon,
-} from "lucide-react";
+import { TruckIcon, LeafIcon, ClockIcon, ShieldCheckIcon } from "lucide-react";
 import sneakersImg from "./sneakers.png";
 import sandalImg from "./sandal.png";
 import sportsImg from "./sports.png";
