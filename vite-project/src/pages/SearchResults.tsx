@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import type { Product } from "../types";
 import { useSearchParams, Link } from "react-router-dom";
-import { dummyProducts } from "../assets/assets";
+
 import { Home, Search } from "lucide-react";
 import Loading from "../components/Loading";
 import ProductCard from "../components/Home/ProductCard";
+import api from "../config/api";
+import toast from "react-hot-toast";
 
 const SearchResults = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -15,12 +17,18 @@ const SearchResults = () => {
   useEffect(() => {
     if (!query) return;
     setLoading(true);
-    setProducts(
-      dummyProducts.filter((p: any) =>
-        p.name.toLowerCase().includes(query.toLowerCase()),
-      ),
-    );
-    setLoading(false);
+
+    api
+      .get(`/product?search=${encodeURIComponent(query)}`)
+      .then((res) => {
+        setProducts(res.data.products || res.data || []);
+      })
+      .catch((error: any) => {
+        toast.error(error.response?.data?.message || error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [query]);
 
   return (
@@ -59,7 +67,7 @@ const SearchResults = () => {
               search term.
             </p>
             <Link
-              to="/products"
+              to="/product"
               className="inline-flex px-5 py-2.5 bg-app-green text-white text-sm font-medium rounded-lg"
             >
               Browse All Products

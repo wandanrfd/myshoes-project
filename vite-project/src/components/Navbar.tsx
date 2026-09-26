@@ -15,19 +15,16 @@ import {
   XIcon,
 } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const user: any = {
-    name: "Wanda Nur",
-    email: "wanda@gmail.com",
-    isAdmin: true,
-  };
+  const { user, logout } = useAuth();
   const { cartCount, setIsCartOpen } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearch = (e: React.SubmitEvent) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
@@ -35,7 +32,8 @@ const Navbar = () => {
     }
   };
 
-  const handelLogOut = () => {
+  const handleLogout = () => {
+    logout();
     setUserMenuOpen(false);
     navigate("/");
   };
@@ -54,7 +52,7 @@ const Navbar = () => {
           {/* Nav Links - Desktop */}
           <div className="hidden md:flex items-center gap-6 text-sm text-zinc-600">
             <Link to="/">Home</Link>
-            <Link to="/products">Products</Link>
+            <Link to="/product">Products</Link>
             <Link to="/deals" className="text-app-orange">
               Deals
             </Link>
@@ -86,7 +84,7 @@ const Navbar = () => {
             >
               <ShoppingCartIcon className="size-5 text-zinc-900" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 size-4 bg-app-orange text-white text-[10px] rounded-full flex-center">
+                <span className="absolute -top-1 -right-1 size-4 bg-app-orange text-white text-[10px] rounded-full flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
@@ -99,28 +97,28 @@ const Navbar = () => {
                   className="flex items-center gap-2 p-2"
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                 >
-                  <div className="size-7 rounded-full bg-amber-950 text-white flex-center">
+                  <div className="size-7 rounded-full bg-amber-950 text-white flex items-center justify-center">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <ChevronDownIcon className="size-3 text-zinc-500" />
                 </button>
               ) : (
-                <div className="flex-center gap-2">
+                <div className="flex items-center justify-center gap-2">
                   <Link
                     to="/login"
-                    className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-950 rounded-full hover:bg-green-950-light transition-colors"
+                    className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-950 rounded-full hover:bg-green-900 transition-colors"
                   >
                     <UserIcon size={16} /> Sign In
                   </Link>
 
                   {userMenuOpen ? (
                     <XIcon
-                      className="md:hidden"
+                      className="md:hidden cursor-pointer"
                       onClick={() => setUserMenuOpen(!userMenuOpen)}
                     />
                   ) : (
                     <MenuIcon
-                      className="md:hidden"
+                      className="md:hidden cursor-pointer"
                       onClick={() => setUserMenuOpen(!userMenuOpen)}
                     />
                   )}
@@ -165,14 +163,14 @@ const Navbar = () => {
                 </Link>
               )}
 
-              <Link to="/products" className="dropdown-link md:hidden">
+              <Link to="/product" className="dropdown-link md:hidden">
                 <ArrowUpRightIcon size={16} /> Products
               </Link>
               <Link to="/deals" className="dropdown-link md:hidden">
                 <ArrowUpRightIcon size={16} /> Deals
               </Link>
               {user?.isAdmin && (
-                <Link to="/admin/products" className="dropdown-link">
+                <Link to="/admin/product" className="dropdown-link">
                   <ShieldIcon className="text-app-orange-dark" size={16} />
                   <span className="text-app-orange-dark">Admin Panel</span>
                 </Link>
@@ -180,7 +178,7 @@ const Navbar = () => {
 
               {user && (
                 <div
-                  onClick={handelLogOut}
+                  onClick={handleLogout}
                   className="border-t border-app-border pt-1"
                 >
                   <button className="flex items-center gap-3 px-4 py-2.5 text-sm text-app-error hover:bg-red-50 w-full transition-colors">

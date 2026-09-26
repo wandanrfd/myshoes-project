@@ -113,73 +113,75 @@ export const categoriesData = [
   },
 ];
 
-export const dummyProducts = [
-  {
-    _id: "1",
-    name: "Stiletto High Heels Elegant",
-    description:
-      "High heels bahan kulit sintetis premium dengan desain anggun untuk acara formal.",
-    price: 650000,
-    offerPrice: 520000,
-    discount: 20,
-    image: [highheelsImg],
-    category: "high-heels",
-    rating: 4.8,
-    reviewCount: 34,
-  },
-  {
-    _id: "2",
-    name: "Classic Low Canvas Sneakers",
-    description:
-      "Sepatu kanvas bertali gaya retro, sangat ringan dan nyaman untuk pemakaian sehari-hari.",
-    price: 380000,
-    offerPrice: 299000,
-    discount: 21,
-    image: [canvasImg],
-    category: "canvas",
-    rating: 4.6,
-    reviewCount: 89,
-  },
-  {
-    _id: "3",
-    name: "Leather Strapped Casual Sandal",
-    description:
-      "Sandal kulit kasual dengan strap fleksibel dan sol empuk anti slip.",
-    price: 250000,
-    offerPrice: 199000,
-    discount: 20,
-    image: [sandalImg],
-    category: "sandal",
-    rating: 4.5,
-    reviewCount: 52,
-  },
-  {
-    _id: "4",
-    name: "Urban Streetwear Sneakers",
-    description:
-      "Sneakers modern dengan sirkulasi udara baik, cocok untuk hang out maupun olahraga ringan.",
-    price: 750000,
-    offerPrice: 599000,
-    discount: 20,
-    image: [sneakersImg],
-    category: "sneakers",
-    rating: 4.9,
-    reviewCount: 120,
-  },
-  {
-    _id: "5",
-    name: "Tactical Leather Boots",
-    description:
-      "Sepatu boots bahan kulit tahan lama dengan grip kuat untuk segala medan.",
-    price: 890000,
-    offerPrice: 712000,
-    discount: 20,
-    image: [bootsImg],
-    category: "boots",
-    rating: 4.7,
-    reviewCount: 45,
-  },
-];
+export const dummyProducts = [];
+
+// export const dummyProducts = [
+//   {
+//     _id: "1",
+//     name: "Stiletto High Heels Elegant",
+//     description:
+//       "High heels bahan kulit sintetis premium dengan desain anggun untuk acara formal.",
+//     price: 650000,
+//     offerPrice: 520000,
+//     discount: 20,
+//     image: [highheelsImg],
+//     category: "high-heels",
+//     rating: 4.8,
+//     reviewCount: 34,
+//   },
+//   {
+//     _id: "2",
+//     name: "Classic Low Canvas Sneakers",
+//     description:
+//       "Sepatu kanvas bertali gaya retro, sangat ringan dan nyaman untuk pemakaian sehari-hari.",
+//     price: 380000,
+//     offerPrice: 299000,
+//     discount: 21,
+//     image: [canvasImg],
+//     category: "canvas",
+//     rating: 4.6,
+//     reviewCount: 89,
+//   },
+//   {
+//     _id: "3",
+//     name: "Leather Strapped Casual Sandal",
+//     description:
+//       "Sandal kulit kasual dengan strap fleksibel dan sol empuk anti slip.",
+//     price: 250000,
+//     offerPrice: 199000,
+//     discount: 20,
+//     image: [sandalImg],
+//     category: "sandal",
+//     rating: 4.5,
+//     reviewCount: 52,
+//   },
+//   {
+//     _id: "4",
+//     name: "Urban Streetwear Sneakers",
+//     description:
+//       "Sneakers modern dengan sirkulasi udara baik, cocok untuk hang out maupun olahraga ringan.",
+//     price: 750000,
+//     offerPrice: 599000,
+//     discount: 20,
+//     image: [sneakersImg],
+//     category: "sneakers",
+//     rating: 4.9,
+//     reviewCount: 120,
+//   },
+//   {
+//     _id: "5",
+//     name: "Tactical Leather Boots",
+//     description:
+//       "Sepatu boots bahan kulit tahan lama dengan grip kuat untuk segala medan.",
+//     price: 890000,
+//     offerPrice: 712000,
+//     discount: 20,
+//     image: [bootsImg],
+//     category: "boots",
+//     rating: 4.7,
+//     reviewCount: 45,
+//   },
+// ];
 
 export const dummyDashboardOrdersData = [
   {

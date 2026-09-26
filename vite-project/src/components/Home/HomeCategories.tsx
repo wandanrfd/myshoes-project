@@ -16,7 +16,7 @@ const HomeCategories = () => {
           {categoriesData.map((cat) => (
             <Link
               key={cat.slug}
-              to={`/products?category=${cat.slug}`}
+              to={`/product?category=${cat.slug}`}
               onClick={() => window.scrollTo(0, 0)}
               className="group flex flex-col items-center gap-3 p-4 shrink-0"
             >

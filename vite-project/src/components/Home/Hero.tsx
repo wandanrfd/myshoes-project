@@ -31,14 +31,14 @@ const Hero = () => {
 
           <div className="flex flex-wrap gap-3">
             <Link
-              to="/products"
+              to="/product"
               className="px-7 py-3 bg-orange-400 text-white font-semibold rounded-full hover:bg-orange-500 transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
             >
               Shop Now <ArrowRightIcon className="size-4" />
             </Link>
 
             <Link
-              to="/products"
+              to="/product"
               className="px-7 py-3 bg-white/10 text-white font-semibold rounded-full hover:bg-white/20 transition-all border border-white/20"
             >
               Browse Categories

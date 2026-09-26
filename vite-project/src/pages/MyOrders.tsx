@@ -85,7 +85,7 @@ const MyOrders = () => {
               Start shopping to see your orders here
             </p>
             <Link
-              to="/products"
+              to="/product"
               className="inline-flex px-4 py-2 bg-app-green text-white text-sm rounded-lg"
             >
               Start Shopping

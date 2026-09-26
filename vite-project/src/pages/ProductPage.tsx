@@ -13,6 +13,7 @@ import {
   Plus as PlusIcon,
   ShoppingCart as ShoppingCartIcon,
 } from "lucide-react";
+import api from "../config/api";
 
 const ProductPage = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "Rp ";
@@ -29,16 +30,24 @@ const ProductPage = () => {
     setLoading(true);
     setLocalQuantity(1);
     window.scrollTo(0, 0);
-    const product = dummyProducts.find((p) => p._id === id);
-    setProduct(product!);
-    setRelatedProducts(dummyProducts.filter((p) => p._id !== id));
-    setLoading(false);
+
+    api
+      .get(`/product/${id}`)
+      .then(({ data }) => {
+        setProduct(data.product);
+        return api.get(`/product?category=${data.product.category}`);
+      })
+      .then(({ data }) => {
+        setRelatedProducts(data.products.filter((p: Product) => p.id !== id));
+      })
+      .catch(() => navigate("/product"))
+      .finally(() => setLoading(false));
   }, [id, navigate]);
 
   if (loading) return <Loading />;
   if (!product) return null;
 
-  const cartItem = items.find((item) => item.product._id === product._id);
+  const cartItem = items.find((item) => item.product.id === product.id);
   const inCart = !!cartItem;
   const displayQuantity = inCart ? cartItem.quantity : localQuantity;
 
@@ -74,14 +83,14 @@ const ProductPage = () => {
           </Link>
           <span>/</span>
           <Link
-            to="/products"
+            to="/product"
             className="hover:text-app-green transition-colors"
           >
             Products
           </Link>
           <span>/</span>
           <Link
-            to={`/products?category=${product.category}`}
+            to={`/product?category=${product.category}`}
             className="hover:text-app-green transition-colors capitalize"
           >
             {categoryLabel}
@@ -167,9 +176,9 @@ const ProductPage = () => {
 
               {/* Stock */}
               <div className="mb-6">
-                {(product.stock ?? 1) > 0 ? (
+                {(product.stock ?? 1) < 100 ? (
                   <span className="text-sm text-app-success font-medium">
-                    ✓ In Stock ({product.stock ?? "Available"} available)
+                    ✓ In Stock
                   </span>
                 ) : (
                   <span className="text-sm text-app-error font-medium">

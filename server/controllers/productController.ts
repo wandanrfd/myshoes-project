@@ -1,94 +1,124 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma.js";
 
-// GET /api/products/flash-deals
+// GET /api/product/flash-deals
 export const getFlashDeals = async (req: Request, res: Response) => {
-  const products = await prisma.product.findMany({
-    where: { stock: { gt: 0 } },
-    orderBy: { originalPrice: "desc" },
-  });
+  try {
+    // Diubah: Filter stock dihilangkan
+    const products = await prisma.product.findMany({
+      orderBy: { originalPrice: "desc" },
+    });
 
-  const productsWithDiscount = products.map((p: any) => {
-    const discount =
-      p.originalPrice && p.price
-        ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
-        : 0;
-    return { ...p, discount };
-  });
+    const productsWithDiscount = products.map((p: any) => {
+      const discount =
+        p.originalPrice && p.price
+          ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
+          : 0;
+      return {
+        ...p,
+        _id: p._id || p.id,
+        id: p.id || p._id,
+        discount,
+      };
+    });
 
-  res.json({ products: productsWithDiscount.slice(0, 8) });
+    res.json({ products: productsWithDiscount.slice(0, 8) });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-// GET /api/products
+// GET /api/product
 export const getProducts = async (req: Request, res: Response) => {
-  const { category, search, minPrice, maxPrice, sort } = req.query;
+  try {
+    const { category, search, minPrice, maxPrice, sort } = req.query;
 
-  const where: any = {};
-  if (category && category !== "all") where.category = category as string;
-  if (search) where.name = { contains: search as string, mode: "insensitive" };
-  if (minPrice || maxPrice) {
-    where.price = {};
-    if (minPrice) where.price.gte = Number(minPrice);
-    if (maxPrice) where.price.lte = Number(maxPrice);
+    // Diubah: Filter stock dihilangkan
+    const products = await prisma.product.findMany();
+
+    const formattedProducts = products.map((p: any) => ({
+      ...p,
+      _id: p._id || p.id,
+      id: p.id || p._id,
+    }));
+
+    res.json({ products: formattedProducts, pages: 1 });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
-
-  const orderBy: any = {};
-  if (sort === "price-low") orderBy.price = "asc";
-  else if (sort === "price-high") orderBy.price = "desc";
-  else orderBy.createdAt = "desc";
-
-  const products = await prisma.product.findMany({ where, orderBy });
-
-  const productsWithDiscount = products.map((p: any) => {
-    const discount =
-      p.originalPrice && p.price
-        ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
-        : 0;
-    return { ...p, discount };
-  });
-
-  res.json({ products: productsWithDiscount });
 };
 
-// GET /api/products/:id
+// GET /api/product/:id
 export const getProduct = async (req: Request, res: Response) => {
-  const product = await prisma.product.findUnique({
-    where: { id: req.params.id as string },
-  });
+  try {
+    const { id } = req.params;
 
-  if (!product) {
-    res.status(404).json({ message: "Product not found" });
-    return;
+    if (!id || id === "undefined") {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+
+    const product = await prisma.product.findUnique({
+      where: { id: id },
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const formattedProduct = {
+      ...product,
+      _id: (product as any)._id || product.id,
+      id: product.id || (product as any)._id,
+    };
+
+    res.json({ product: formattedProduct });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
-
-  const discount =
-    product.originalPrice && product.price
-      ? Math.round(
-          ((product.originalPrice - product.price) / product.originalPrice) *
-            100,
-        )
-      : 0;
-
-  res.json({ product: { ...product, discount } });
 };
 
-// POST /api/products
+// POST /api/product
 export const createProduct = async (req: Request, res: Response) => {
-  const product = await prisma.product.create({ data: req.body });
-  res.status(201).json({ product });
+  try {
+    const productData = req.body;
+    const newProduct = await prisma.product.create({
+      data: productData,
+    });
+
+    res.status(201).json({ product: newProduct });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-// PUT /api/products/:id
+// PUT /api/product/:id
 export const updateProduct = async (req: Request, res: Response) => {
-  const product = await prisma.product.update({
-    where: { id: req.params.id as string },
-    data: req.body,
-  });
-  res.json({ product });
+  try {
+    const { id } = req.params;
+    const productData = req.body;
+
+    const updatedProduct = await prisma.product.update({
+      where: { id: id },
+      data: productData,
+    });
+
+    res.json({ product: updatedProduct });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-// DELETE /api/products/:id
+// DELETE /api/product/:id
 export const deleteProduct = async (req: Request, res: Response) => {
-  await prisma.product.delete({ where: { id: req.params.id as string } });
-  res.json({ message: "Deleted" });
+  try {
+    const { id } = req.params;
+
+    await prisma.product.delete({
+      where: { id: id },
+    });
+
+    res.json({ message: "Product deleted successfully" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 };
